@@ -1,6 +1,6 @@
 package org.cobalt.internal.ui.util
 
-import org.cobalt.CoreMod.mc
+import org.cobalt.Cobalt.mc
 
 internal inline val mouseX: Double
   get() = mc.mouse.x

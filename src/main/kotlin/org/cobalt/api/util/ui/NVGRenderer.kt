@@ -2,7 +2,7 @@ package org.cobalt.api.util.ui
 
 import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import org.cobalt.CoreMod.mc
+import org.cobalt.Cobalt.mc
 import net.minecraft.client.gl.GlBackend
 import net.minecraft.client.texture.GlTexture
 import java.nio.ByteBuffer

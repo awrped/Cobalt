@@ -8,7 +8,7 @@ import org.cobalt.internal.command.MainCommand
 import org.cobalt.api.util.helper.TickScheduler
 import org.cobalt.internal.rpc.RichPresenceManager
 
-object CoreMod : ClientModInitializer{
+object Cobalt : ClientModInitializer{
   val mc: MinecraftClient
     get() = MinecraftClient.getInstance()
 
