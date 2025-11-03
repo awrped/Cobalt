@@ -33,5 +33,4 @@ object Cobalt : ClientModInitializer {
     DiscordPresence.connect()
     println("Cobalt Mod Initialized")
   }
-
 }
