@@ -4,7 +4,7 @@ import org.cobalt.api.module.setting.Setting
 
 abstract class Module(
   val name: String,
-  val category: String,
+  val category: Category,
 ) {
 
   var isEnabled: Boolean = false

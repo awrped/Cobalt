@@ -1,4 +1,4 @@
-package org.cobalt.internal.util.render
+package org.cobalt.internal.helper
 
 import com.mojang.blaze3d.pipeline.BlendFunction
 import com.mojang.blaze3d.pipeline.RenderPipeline

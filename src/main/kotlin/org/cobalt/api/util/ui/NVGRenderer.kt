@@ -2,13 +2,13 @@ package org.cobalt.api.util.ui
 
 import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import org.cobalt.Cobalt.mc
-import net.minecraft.client.gl.GlBackend
-import net.minecraft.client.texture.GlTexture
 import java.nio.ByteBuffer
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
+import net.minecraft.client.gl.GlBackend
+import net.minecraft.client.texture.GlTexture
+import org.cobalt.Cobalt.mc
 import org.cobalt.api.util.ui.helper.Font
 import org.cobalt.api.util.ui.helper.Gradient
 import org.cobalt.api.util.ui.helper.Image
@@ -231,7 +231,7 @@ object NVGRenderer {
     nvgText(vg, round(x), round(y), text)
   }
 
-  fun textWidth(text: String, size: Float, font: Font): Float {
+  fun textWidth(text: String, size: Float, font: Font = interFont): Float {
     nvgFontSize(vg, size)
     nvgFontFaceId(vg, getFontID(font))
     return nvgTextBounds(vg, 0f, 0f, text, fontBounds)

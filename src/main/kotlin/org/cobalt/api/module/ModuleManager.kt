@@ -12,4 +12,11 @@ object ModuleManager {
     return moduleList
   }
 
+  fun getCategories(): List<Category> {
+    return moduleList
+      .map { it.category }
+      .distinct()
+      .sortedBy { it.name }
+  }
+
 }

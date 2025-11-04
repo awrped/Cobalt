@@ -1,11 +1,11 @@
-package org.cobalt.internal.util
+package org.cobalt.internal.helper
 
 import com.google.gson.*
 import java.io.File
 import org.cobalt.Cobalt
 import org.cobalt.api.module.ModuleManager
 
-object Config {
+internal object Config {
 
   private val gson = GsonBuilder().setPrettyPrinting().create()
   private val modulesFile = File(Cobalt.mc.runDirectory, "config/cobalt/modules.json")

@@ -8,7 +8,7 @@ import org.cobalt.api.feat.rpc.DiscordPresence
 import org.cobalt.api.util.TickScheduler
 import org.cobalt.internal.addon.AddonManager
 import org.cobalt.internal.command.MainCommand
-import org.cobalt.internal.util.Config
+import org.cobalt.internal.helper.Config
 
 object Cobalt : ClientModInitializer {
 

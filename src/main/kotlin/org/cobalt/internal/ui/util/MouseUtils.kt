@@ -1,4 +1,4 @@
-package org.cobalt.internal.util.ui
+package org.cobalt.internal.ui.util
 
 import org.cobalt.Cobalt.mc
 
@@ -8,5 +8,5 @@ internal inline val mouseX: Double
 internal inline val mouseY: Double
   get() = mc.mouse.y
 
-internal fun isHoveringOver(x: Double, y: Double, width: Double, height: Double): Boolean =
+internal fun isHoveringOver(x: Float, y: Float, width: Float, height: Float): Boolean =
     mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height
