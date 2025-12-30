@@ -5,12 +5,7 @@ import org.cobalt.api.pathfinder.IPathExec
 
 object PathExec : IPathExec {
 
-  override fun onTick(it: ClientPlayerEntity) {
-    super.onTick(it)
-  }
-
-  override fun onWorldRenderLast(it: ClientPlayerEntity) {
-    super.onWorldRenderLast(it)
-  }
+  override fun onTick(it: ClientPlayerEntity) {}
+  override fun onWorldRenderLast(it: ClientPlayerEntity) {}
 
 }

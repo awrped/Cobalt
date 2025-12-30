@@ -1,4 +1,4 @@
-package org.cobalt.internal.ui.panel.components
+package org.cobalt.internal.ui.components
 
 import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer

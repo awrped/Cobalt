@@ -2,13 +2,12 @@ package org.cobalt
 
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.option.KeyBinding
-import org.cobalt.api.addon.Addon
 import org.cobalt.api.command.CommandManager
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.client.TickEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
+import org.cobalt.api.module.ModuleManager
 import org.cobalt.api.pathfinder.IPathExec
 import org.cobalt.api.util.TickScheduler
 import org.cobalt.api.util.rotation.IRotationExec
@@ -32,7 +31,10 @@ object Cobalt : ClientModInitializer {
   override fun onInitializeClient() {
     AddonLoader.getAddons()
       .map { it.second }
-      .forEach(Addon::onLoad)
+      .forEach {
+        it.onLoad()
+        ModuleManager.addModules(it.getModules())
+      }
 
     CommandManager.register(MainCommand)
     CommandManager.dispatchAll()
@@ -48,11 +50,17 @@ object Cobalt : ClientModInitializer {
     println("Cobalt Mod Initialized")
   }
 
-  @JvmStatic private var rotationExec: IRotationExec = RotationExec
-  @JvmStatic private var pathExec: IPathExec = PathExec
+  @JvmStatic
+  private var rotationExec: IRotationExec = RotationExec
 
-  @JvmStatic fun getRotationExec() = rotationExec
-  @JvmStatic fun getPathExec() = pathExec
+  @JvmStatic
+  private var pathExec: IPathExec = PathExec
+
+  @JvmStatic
+  fun getRotationExec() = rotationExec
+
+  @JvmStatic
+  fun getPathExec() = pathExec
 
   @JvmStatic
   fun setRotationExec(pathExec: IPathExec) {

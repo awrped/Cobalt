@@ -5,6 +5,7 @@ import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import org.cobalt.api.event.Event
 
+@Suppress("UNUSED_PARAMETER")
 abstract class WorldRenderEvent(val context: WorldRenderContext) : Event() {
   class Start(context: WorldRenderContext) : WorldRenderEvent(context)
   class Last(context: WorldRenderContext) : WorldRenderEvent(context)

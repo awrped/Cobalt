@@ -12,7 +12,7 @@ object PlayerUtils {
   val position: BlockPos
     get() = BlockPos.ofFloored(
       mc.player!!.x,
-      ceil(mc.player!!.y) - 1,
+      ceil(mc.player!!.y),
       mc.player!!.z
     )
  /**

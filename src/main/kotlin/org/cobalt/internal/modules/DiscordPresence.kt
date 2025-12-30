@@ -46,7 +46,7 @@ object DiscordPresence {
   }
 
   @SubscribeEvent
-  fun onTick(event: TickEvent.End) {
+  fun onTick(ignored: TickEvent.End) {
     if (System.currentTimeMillis() - lastUpdate < 1_800_000)
       return
 

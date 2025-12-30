@@ -1,10 +1,10 @@
-package org.cobalt.internal.ui.panel.components
+package org.cobalt.internal.ui.components
 
+import java.awt.Color
 import org.cobalt.api.addon.Addon
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.loader.AddonLoader
 import org.cobalt.internal.ui.UIComponent
-import java.awt.Color
 
 class UIAddonEntry(
   val metadata: AddonLoader.AddonMetadata,

@@ -11,7 +11,7 @@ import org.cobalt.internal.helper.Config
 import org.cobalt.internal.ui.UIScreen
 import org.cobalt.internal.ui.animation.EaseInOutAnimation
 import org.cobalt.internal.ui.panel.UIPanel
-import org.cobalt.internal.ui.panel.panels.UIAddons
+import org.cobalt.internal.ui.panel.panels.UIAddonList
 import org.cobalt.internal.ui.panel.panels.UISidebar
 
 object UIConfig : UIScreen() {
@@ -22,7 +22,7 @@ object UIConfig : UIScreen() {
 
   /** UI Panels */
   private val sidebar = UISidebar()
-  private var body: UIPanel = UIAddons()
+  private var body: UIPanel = UIAddonList()
 
   init {
     EventBus.register(this)
@@ -104,6 +104,10 @@ object UIConfig : UIScreen() {
     Config.saveModulesConfig()
     wasClosed = true
     super.close()
+  }
+
+  fun swapBodyPanel(panel: UIPanel) {
+    this.body = panel
   }
 
 }

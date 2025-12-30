@@ -1,11 +1,11 @@
 package org.cobalt.internal.ui.panel.panels
 
 import java.awt.Color
-import meteordevelopment.discordipc.DiscordIPC
 import net.minecraft.client.MinecraftClient
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.panel.UIPanel
+import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.isHoveringOver
 
 class UISidebar : UIPanel(
@@ -16,7 +16,7 @@ class UISidebar : UIPanel(
 ) {
 
   private val moduleButton = UIButton("/assets/cobalt/icons/box.svg") {
-    println("Opening modules page")
+    UIConfig.swapBodyPanel(UIAddonList())
   }
 
   private val hudButton = UIButton("/assets/cobalt/icons/interface.svg") {

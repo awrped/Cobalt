@@ -4,14 +4,15 @@ import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.loader.AddonLoader
 import org.cobalt.internal.ui.UIComponent
+import org.cobalt.internal.ui.components.UIAddonEntry
+import org.cobalt.internal.ui.components.UITopbar
 import org.cobalt.internal.ui.panel.UIPanel
-import org.cobalt.internal.ui.panel.components.UIAddonEntry
-import org.cobalt.internal.ui.panel.components.UITopbar
+import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.UIGridLayout
 import org.cobalt.internal.ui.util.UIScrollHandler
 import org.cobalt.internal.ui.util.isHoveringOver
 
-class UIAddons : UIPanel(
+class UIAddonList : UIPanel(
   x = 0F,
   y = 0F,
   width = 890F,
@@ -52,6 +53,16 @@ class UIAddons : UIPanel(
     entries.forEach(UIComponent::render)
 
     NVGRenderer.popScissor()
+  }
+
+  override fun mouseClicked(button: Int): Boolean {
+    for (entry in entries) {
+      if (isHoveringOver(entry.x, entry.y, entry.width, entry.height)) {
+        UIConfig.swapBodyPanel(UIModuleList(entry.metadata, entry.addon))
+      }
+    }
+
+    return false
   }
 
   override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
