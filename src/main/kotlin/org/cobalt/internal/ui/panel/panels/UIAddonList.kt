@@ -33,6 +33,7 @@ class UIAddonList : UIPanel(
 
   init {
     components.addAll(entries)
+    components.add(topBar)
   }
 
   override fun render() {

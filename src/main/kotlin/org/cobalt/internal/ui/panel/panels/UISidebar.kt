@@ -19,9 +19,9 @@ class UISidebar : UIPanel(
     UIConfig.swapBodyPanel(UIAddonList())
   }
 
-  private val hudButton = UIButton("/assets/cobalt/icons/interface.svg") {
-    println("Opening HUD Editor")
-  }
+//  private val hudButton = UIButton("/assets/cobalt/icons/interface.svg") {
+//    println("Opening HUD Editor")
+//  }
 
   private val userIcon = try {
     NVGRenderer.createImage(
@@ -33,7 +33,7 @@ class UISidebar : UIPanel(
 
   init {
     components.addAll(
-      listOf(moduleButton, hudButton)
+      listOf(moduleButton)
     )
   }
 
@@ -46,9 +46,9 @@ class UISidebar : UIPanel(
       .updateBounds(x + (width / 2F) - (moduleButton.width / 2F), y + 75F)
       .render()
 
-    hudButton
-      .updateBounds(x + (width / 2F) - (hudButton.width / 2F), y + 115F)
-      .render()
+//    hudButton
+//      .updateBounds(x + (width / 2F) - (hudButton.width / 2F), y + 115F)
+//      .render()
 
     NVGRenderer.image(
       userIcon,
