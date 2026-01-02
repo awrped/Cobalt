@@ -52,9 +52,8 @@ internal class UISidebar : UIPanel(
 
   override fun render() {
     NVGRenderer.rect(x, y, width, height, Color(18, 18, 18).rgb, 10F)
-    val hue = Random.nextDouble(0.0, 1.0).toFloat()
-    val neon = Color.getHSBColor(hue, 0.85f + Random.nextFloat() * 0.15f, 0.9f + Random.nextFloat() * 0.1f)
-    NVGRenderer.text("cb", x + width / 2F - 15F, y + 25F, 25F, neon.rgb)
+    NVGRenderer.text("cb", x + width / 2F - 15F, y + 25F, 25F, Color(230, 230, 230).rgb)
+
     moduleButton
       .setSelected(true)
       .updateBounds(x + (width / 2F) - (moduleButton.width / 2F), y + 75F)

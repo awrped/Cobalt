@@ -3,7 +3,6 @@ package org.cobalt.internal.ui.components.tooltips
 import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
-import org.cobalt.internal.ui.animation.Animation
 import org.cobalt.internal.ui.animation.ColorAnimation
 import org.cobalt.internal.ui.util.isHoveringOver
 
@@ -15,13 +14,12 @@ internal class UITooltip(
   private val content: () -> UIComponent,
   private val position: TooltipPosition = TooltipPosition.ABOVE,
   private val padding: Float = 8F,
-  private val animation: Animation<*>? = null
 ) : UIComponent(0f, 0f, 0f, 0f) {
 
   private var targetWidth = 0F
   private var targetHeight = 0F
   private var isHovering = false
-  private val alphaAnim = if (animation is ColorAnimation) animation else ColorAnimation(150L)
+  private val alphaAnim = ColorAnimation(150L)
   private var wasHovering = false
 
   init {
@@ -61,7 +59,6 @@ internal class UITooltip(
     isHovering = isHoveringOver(x, y, targetWidth, targetHeight)
 
     if (isHovering != wasHovering) {
-      animation?.start()
       alphaAnim.start()
       wasHovering = isHovering
     }
