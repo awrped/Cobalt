@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <img 
+  <img
     width="100px"
     height="100px"
     src="/images/logo.png"
@@ -16,7 +16,7 @@
 </div>
 
 > [!WARNING]
-> The project includes early implementations of a UI system, a pathfinder, and a path executor. These components are **work-in-progress** and not yet feature-complete, but they serve as a foundation for future development and community contributions.
+> The project includes early implementations of a UI system. The mod itself is a **work-in-progress** and not yet feature-complete, but they serve as a foundation for future development and community contributions.
 
 > [!NOTE]
 > This project was made possible thanks to:
