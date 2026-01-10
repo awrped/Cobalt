@@ -23,12 +23,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public class WorldContext_WorldRendererMixin {
 
+  @Unique
+  private final WorldRenderContext ctx = new WorldRenderContext();
   @Shadow
   @Final
   private BufferBuilderStorage bufferBuilders;
-
-  @Unique
-  private final WorldRenderContext ctx = new WorldRenderContext();
 
   @Inject(method = "render", at = @At("HEAD"))
   private void render(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, Matrix4f positionMatrix, Matrix4f matrix4f, Matrix4f projectionMatrix, GpuBufferSlice fogBuffer, Vector4f fogColor, boolean renderSky, CallbackInfo ci) {
