@@ -5,17 +5,14 @@ import net.minecraft.client.MinecraftClient
 import org.cobalt.api.command.CommandManager
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.event.annotation.SubscribeEvent
-import org.cobalt.api.event.impl.client.TickEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
 import org.cobalt.api.module.ModuleManager
 import org.cobalt.api.notification.NotificationManager
-import org.cobalt.api.pathfinder.IPathExec
 import org.cobalt.api.util.TickScheduler
-import org.cobalt.api.util.rotation.IRotationExec
 import org.cobalt.internal.command.MainCommand
 import org.cobalt.internal.helper.Config
 import org.cobalt.internal.loader.AddonLoader
-import org.cobalt.internal.rotation.RotationExec
+import org.cobalt.api.rotation.RotationExec
 
 @Suppress("UNUSED")
 object Cobalt : ClientModInitializer {

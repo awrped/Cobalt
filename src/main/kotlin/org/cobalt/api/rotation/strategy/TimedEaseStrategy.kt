@@ -1,8 +1,8 @@
-package org.cobalt.internal.rotation.strategy
+package org.cobalt.api.rotation.strategy
 
 import net.minecraft.client.network.ClientPlayerEntity
-import org.cobalt.internal.rotation.EasingType
-import org.cobalt.internal.rotation.IRotationStrategy
+import org.cobalt.api.rotation.EasingType
+import org.cobalt.api.rotation.IRotationStrategy
 
 class TimedEaseStrategy(
   private val yawEaseType: EasingType = EasingType.LINEAR,
