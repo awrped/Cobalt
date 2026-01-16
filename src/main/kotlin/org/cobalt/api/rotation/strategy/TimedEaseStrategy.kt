@@ -3,6 +3,7 @@ package org.cobalt.api.rotation.strategy
 import net.minecraft.client.network.ClientPlayerEntity
 import org.cobalt.api.rotation.EasingType
 import org.cobalt.api.rotation.IRotationStrategy
+import org.cobalt.api.util.helper.Rotation
 
 class TimedEaseStrategy(
   private val yawEaseType: EasingType = EasingType.LINEAR,
@@ -24,7 +25,7 @@ class TimedEaseStrategy(
     player: ClientPlayerEntity,
     targetYaw: Float,
     targetPitch: Float,
-  ): Pair<Float, Float>? {
+  ): Rotation? {
     if (startYaw == null || startPitch == null) {
       startYaw = player.yaw
       startPitch = player.pitch
@@ -40,7 +41,7 @@ class TimedEaseStrategy(
     val newYaw = yawEaseType.apply(startYaw!!, targetYaw, progress)
     val newPitch = pitchEaseType.apply(startPitch!!, targetPitch, progress)
 
-    return Pair(newYaw, newPitch)
+    return Rotation(newYaw, newPitch)
   }
 
 }
