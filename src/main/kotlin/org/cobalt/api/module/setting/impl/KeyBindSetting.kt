@@ -5,16 +5,17 @@ import com.google.gson.JsonPrimitive
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.InputUtil
 import org.cobalt.api.module.setting.Setting
+import org.cobalt.api.util.helper.KeyBind
 import org.lwjgl.glfw.GLFW
 
 class KeyBindSetting(
   name: String,
   description: String,
-  defaultValue: Int,
-) : Setting<Int>(name, description, defaultValue) {
+  defaultValue: KeyBind,
+) : Setting<KeyBind>(name, description, defaultValue) {
 
   val keyName: String
-    get() = when (value) {
+    get() = when (value.keyCode) {
       -1 -> "None"
       GLFW.GLFW_KEY_LEFT_SUPER, GLFW.GLFW_KEY_RIGHT_SUPER -> "Super"
       GLFW.GLFW_KEY_LEFT_SHIFT -> "Left Shift"
@@ -27,22 +28,15 @@ class KeyBindSetting(
       GLFW.GLFW_KEY_ENTER -> "Enter"
       GLFW.GLFW_KEY_TAB -> "Tab"
       GLFW.GLFW_KEY_CAPS_LOCK -> "Caps Lock"
-      else -> GLFW.glfwGetKeyName(value, 0)?.uppercase() ?: "Unknown"
+      else -> GLFW.glfwGetKeyName(value.keyCode, 0)?.uppercase() ?: "Unknown"
     }
 
   override fun read(element: JsonElement) {
-    this.value = element.asInt
+    this.value.keyCode = element.asInt
   }
 
   override fun write(): JsonElement {
-    return JsonPrimitive(value)
-  }
-
-  companion object {
-    fun Int.isPressed(): Boolean {
-      if (this == -1) return false
-      return InputUtil.isKeyPressed(MinecraftClient.getInstance().window, this)
-    }
+    return JsonPrimitive(value.keyCode)
   }
 
 }
