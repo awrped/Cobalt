@@ -5,7 +5,6 @@ import org.cobalt.api.command.CommandManager
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.module.ModuleManager
 import org.cobalt.api.notification.NotificationManager
-import org.cobalt.api.pathfinder.PathExecutor
 import org.cobalt.api.rotation.RotationExecutor
 import org.cobalt.api.util.TickScheduler
 import org.cobalt.internal.command.MainCommand
@@ -26,7 +25,7 @@ object Cobalt : ClientModInitializer {
 
     listOf(
       TickScheduler, MainCommand, NotificationManager,
-      RotationExecutor, PathExecutor
+      RotationExecutor,
     ).forEach { EventBus.register(it) }
 
     Config.loadModulesConfig()

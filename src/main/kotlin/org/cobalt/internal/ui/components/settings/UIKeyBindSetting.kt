@@ -65,7 +65,7 @@ internal class UIKeyBindSetting(private val setting: KeyBindSetting) : UICompone
     val textWidth = NVGRenderer.textWidth(text, 15F)
 
     if (isListening) {
-      setting.value = button
+      setting.value.keyCode = button
       isListening = false
       return true
     } else if (isHoveringOver(
@@ -89,9 +89,9 @@ internal class UIKeyBindSetting(private val setting: KeyBindSetting) : UICompone
 
     val keyCode = InputUtil.fromKeyCode(input).code
 
-    setting.value = when (keyCode) {
+    setting.value.keyCode = when (keyCode) {
       GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_BACKSPACE -> -1
-      GLFW.GLFW_KEY_ENTER -> setting.value
+      GLFW.GLFW_KEY_ENTER -> setting.value.keyCode
       else -> keyCode
     }
 
