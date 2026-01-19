@@ -38,7 +38,7 @@ class TimedEaseStrategy(
     val progress = 1f - ((endTime - now).toFloat() / duration.toFloat())
     val t = progress.coerceIn(0f, 1f)
 
-    val yawDelta = AngleUtils.normalizeYaw(targetYaw - startYaw)
+    val yawDelta = AngleUtils.normalizeAngle(targetYaw - startYaw)
     val yaw = yawEasing.apply(startYaw, startYaw + yawDelta, t)
 
     val pitch = clampPitch(

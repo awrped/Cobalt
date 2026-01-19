@@ -5,9 +5,7 @@ import net.minecraft.client.MinecraftClient
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
 import org.cobalt.api.util.AngleUtils
-import org.cobalt.api.util.PlayerUtils
 import org.cobalt.api.util.helper.Rotation
-import org.cobalt.api.util.player.MovementManager
 
 object RotationExecutor {
 
@@ -62,12 +60,10 @@ object RotationExecutor {
       )
 
       if (result == null) {
-        player.yaw = applyGCD(targetYaw, player.yaw)
-        player.pitch = applyGCD(targetPitch, player.pitch)
         stopRotating()
       } else {
-        player.yaw = applyGCD(result.yaw, player.yaw)
-        player.pitch = applyGCD(result.pitch, player.pitch)
+        player.yaw = AngleUtils.normalizeAngle(applyGCD(result.yaw, player.yaw))
+        player.pitch = applyGCD(result.pitch, player.pitch, -90f, 90f).coerceIn(-90f, 90f)
       }
     }
   }
@@ -86,7 +82,7 @@ object RotationExecutor {
     val f = sensitivity * 0.6 + 0.2
     val gcd = f * f * f * 1.2
 
-    val delta = getRotationDelta(prevRotation, rotation)
+    val delta = AngleUtils.getRotationDelta(prevRotation, rotation)
     val roundedDelta = (delta / gcd).roundToInt() * gcd
     var result = prevRotation + roundedDelta
 
@@ -98,20 +94,6 @@ object RotationExecutor {
     }
 
     return result.toFloat()
-  }
-
-  private fun getRotationDelta(from: Float, to: Float): Float {
-    var delta = normalizeAngle(to) - normalizeAngle(from)
-    if (delta > 180f) delta -= 360f
-    if (delta < -180f) delta += 360f
-    return delta
-  }
-
-  private fun normalizeAngle(angle: Float): Float {
-    var result = angle
-    while (result > 180f) result -= 360f
-    while (result < -180f) result += 360f
-    return result
   }
 
 }

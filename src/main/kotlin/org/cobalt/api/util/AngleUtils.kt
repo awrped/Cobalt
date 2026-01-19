@@ -16,11 +16,18 @@ object AngleUtils {
   private val player: ClientPlayerEntity?
     get() = mc.player
 
-  fun normalizeYaw(angle: Float): Float {
+  fun normalizeAngle(angle: Float): Float {
     var a = angle % 360f
     if (a >= 180f) a -= 360f
     if (a < -180f) a += 360f
     return a
+  }
+
+  fun getRotationDelta(from: Float, to: Float): Float {
+    var delta = normalizeAngle(to) - normalizeAngle(from)
+    if (delta > 180f) delta -= 360f
+    if (delta < -180f) delta += 360f
+    return delta
   }
 
   fun getRotation(from: Vec3d, to: Vec3d): Rotation {
