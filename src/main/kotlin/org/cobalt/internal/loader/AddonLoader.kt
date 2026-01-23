@@ -92,7 +92,7 @@ object AddonLoader {
           )
         }
 
-        val instance = Class.forName(entrypoint, true, jarPath.javaClass.classLoader).let {
+        val instance = Class.forName(entrypoint).let {
           try {
             it.getField("INSTANCE").get(null)
           } catch (_: NoSuchFieldException) {
