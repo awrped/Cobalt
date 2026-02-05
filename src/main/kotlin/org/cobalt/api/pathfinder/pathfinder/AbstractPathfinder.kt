@@ -1,6 +1,6 @@
 package org.cobalt.api.pathfinder.pathfinder
 
-import java.util.*
+import java.util.LinkedHashSet
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -13,8 +13,6 @@ import org.cobalt.api.pathfinder.pathing.INeighborStrategy
 import org.cobalt.api.pathfinder.pathing.Pathfinder
 import org.cobalt.api.pathfinder.pathing.configuration.PathfinderConfiguration
 import org.cobalt.api.pathfinder.pathing.context.EnvironmentContext
-import org.cobalt.api.pathfinder.pathing.hook.PathfinderHook
-import org.cobalt.api.pathfinder.pathing.hook.PathfindingContext
 import org.cobalt.api.pathfinder.pathing.processing.CostProcessor
 import org.cobalt.api.pathfinder.pathing.processing.Processor
 import org.cobalt.api.pathfinder.pathing.processing.ValidationProcessor
@@ -25,7 +23,6 @@ import org.cobalt.api.pathfinder.pathing.result.PathfinderResult
 import org.cobalt.api.pathfinder.provider.NavigationPointProvider
 import org.cobalt.api.pathfinder.result.PathImpl
 import org.cobalt.api.pathfinder.result.PathfinderResultImpl
-import org.cobalt.api.pathfinder.wrapper.Depth
 import org.cobalt.api.pathfinder.wrapper.PathPosition
 
 abstract class AbstractPathfinder(
@@ -63,8 +60,6 @@ abstract class AbstractPathfinder(
     pathfinderConfiguration.getNodeCostProcessors()
   protected val neighborStrategy: INeighborStrategy = pathfinderConfiguration.neighborStrategy
 
-  private val pathfinderHooks: MutableSet<PathfinderHook> = Collections.synchronizedSet(HashSet())
-
   private val abortRequested = AtomicBoolean(false)
 
   override fun findPath(
@@ -78,10 +73,6 @@ abstract class AbstractPathfinder(
 
   override fun abort() {
     this.abortRequested.set(true)
-  }
-
-  override fun registerPathfindingHook(hook: PathfinderHook) {
-    this.pathfinderHooks.add(hook)
   }
 
   private fun initiatePathing(
@@ -173,12 +164,6 @@ abstract class AbstractPathfinder(
 
         val currentNode = extractBestNode(openSet)
         markNodeAsExpanded(currentNode)
-
-        pathfinderHooks.forEach { hook ->
-          hook.onPathfindingStep(
-            PathfindingContext(currentNode.getPosition(), Depth.of(currentDepth))
-          )
-        }
 
         if (currentNode.getHeuristic() < bestFallbackNode.getHeuristic()) {
           bestFallbackNode = currentNode

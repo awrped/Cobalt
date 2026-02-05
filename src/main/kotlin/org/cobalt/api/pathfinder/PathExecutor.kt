@@ -8,7 +8,7 @@ import org.cobalt.api.event.EventBus
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.client.TickEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
-import org.cobalt.api.pathfinder.factory.impl.AStarPathfinderFactory
+import org.cobalt.api.pathfinder.pathfinder.AStarPathfinder
 import org.cobalt.api.pathfinder.pathing.NeighborStrategies
 import org.cobalt.api.pathfinder.pathing.configuration.PathfinderConfiguration
 import org.cobalt.api.pathfinder.pathing.processing.impl.MinecraftPathProcessor
@@ -38,8 +38,6 @@ object PathExecutor {
     val start = PathPosition(player.x, player.y, player.z)
     val target = PathPosition(x, y, z)
 
-    val factory = AStarPathfinderFactory()
-
     val processor = MinecraftPathProcessor()
     val config =
       PathfinderConfiguration.builder()
@@ -51,7 +49,7 @@ object PathExecutor {
         .nodeCostProcessors(listOf(processor))
         .build()
 
-    val pathfinder = factory.createPathfinder(config)
+    val pathfinder = AStarPathfinder(config)
 
     ChatUtils.sendDebug("Calculating path to $x, $y, $z...")
     val startTime = System.currentTimeMillis()
