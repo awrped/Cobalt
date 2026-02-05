@@ -15,6 +15,7 @@ import org.cobalt.api.pathfinder.pathing.processing.impl.MinecraftPathProcessor
 import org.cobalt.api.pathfinder.pathing.result.Path
 import org.cobalt.api.pathfinder.pathing.result.PathState
 import org.cobalt.api.pathfinder.provider.impl.MinecraftNavigationProvider
+import org.cobalt.api.pathfinder.result.PathImpl
 import org.cobalt.api.pathfinder.wrapper.PathPosition
 import org.cobalt.api.util.ChatUtils
 import org.cobalt.api.util.render.Render3D
@@ -54,35 +55,50 @@ object PathExecutor {
     ChatUtils.sendDebug("Calculating path to $x, $y, $z...")
     val startTime = System.currentTimeMillis()
     pathfinder.findPath(start, target).thenAccept { result ->
-      val duration = System.currentTimeMillis() - startTime
-      if (result.successful()) {
-        currentPath = result.getPath()
+      mc.execute {
+        val duration = System.currentTimeMillis() - startTime
+        val state = result.getPathState()
+        if (state != PathState.FOUND) {
+          ChatUtils.sendMessage("§cFailed to find path: $state")
+          return@execute
+        }
+
+        val rawPath = result.getPath()
+        val positions = rawPath.collect().toList()
+        val path =
+          if (positions.size <= 2) {
+            rawPath
+          } else {
+            val simplified = ArrayList<PathPosition>(positions.size)
+            simplified.add(positions.first())
+
+            for (i in 1 until positions.size - 1) {
+              val prev = simplified.last()
+              val curr = positions[i]
+              val next = positions[i + 1]
+
+              val prevDx = (curr.flooredX - prev.flooredX).coerceIn(-1, 1)
+              val prevDy = (curr.flooredY - prev.flooredY).coerceIn(-1, 1)
+              val prevDz = (curr.flooredZ - prev.flooredZ).coerceIn(-1, 1)
+              val nextDx = (next.flooredX - curr.flooredX).coerceIn(-1, 1)
+              val nextDy = (next.flooredY - curr.flooredY).coerceIn(-1, 1)
+              val nextDz = (next.flooredZ - curr.flooredZ).coerceIn(-1, 1)
+
+              if (prevDx == nextDx && prevDy == nextDy && prevDz == nextDz) {
+                continue
+              }
+              simplified.add(curr)
+            }
+
+            simplified.add(positions.last())
+            PathImpl(rawPath.getStart(), rawPath.getEnd(), simplified)
+          }
+        currentPath = path
         currentWaypointIndex = 0
 
-        val state = result.getPathState()
-        val path = result.getPath()
-
-        if (state == PathState.FOUND) {
-          ChatUtils.sendMessage(
-            "§aPath found! §7Calculated in §f${duration}ms §8(${path.length()} nodes)"
-          )
-        } else {
-          /*
-           * partial paths can happen, i would recommend improving this functionality
-           * to whoever maintainer wants to maintain my horrible shitcode of a pathfinder.
-           * i think partial paths should be refactored, i will write all the cases now
-           * iteration limit -> self explanatory xd (or if u cant use ur brain
-           * then its just if the algorithm takes too many iterations to find a goal.
-           * this is set literaaally like 20 lines above you...)
-           * fallback -> pf searches everywhere and couldnt find a possible way to get there.
-           * this can happen in the case of unloaded chunks, or an obstruction
-           */
-          ChatUtils.sendMessage(
-            "§ePartial path found! §7Calculated in §f${duration}ms §8(${path.length()} nodes)"
-          )
-        }
-      } else {
-        ChatUtils.sendMessage("§cFailed to find path: ${result.getPathState()}")
+        ChatUtils.sendMessage(
+          "§aPath found! §7Calculated in §f${duration}ms §8(${path.length()} nodes)"
+        )
       }
     }
   }
@@ -115,7 +131,7 @@ object PathExecutor {
     val horizontalDistSq =
       (player.x - targetVec.x) * (player.x - targetVec.x) +
         (player.z - targetVec.z) * (player.z - targetVec.z)
-    if (horizontalDistSq < .25) {
+    if (horizontalDistSq < 0.25) {
       currentWaypointIndex++
     }
   }
@@ -146,12 +162,12 @@ object PathExecutor {
       Render3D.drawBox(
         event.context,
         AABB(
-          currentPos.x - .25,
-          currentPos.y - .25,
-          currentPos.z - .25,
-          currentPos.x + .25,
-          currentPos.y + .25,
-          currentPos.z + .25
+          currentPos.x - 0.25,
+          currentPos.y - 0.25,
+          currentPos.z - 0.25,
+          currentPos.x + 0.25,
+          currentPos.y + 0.25,
+          currentPos.z + 0.25
         ),
         Color.GREEN,
         true
