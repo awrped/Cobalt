@@ -22,32 +22,16 @@ data class PathfinderConfiguration(
   val validationProcessors: List<ValidationProcessor>,
   val costProcessors: List<CostProcessor>,
   val neighborStrategy: INeighborStrategy,
-  val gridCellSize: Int,
-  val bloomFilterSize: Int,
-  val bloomFilterFpp: Double,
   val heuristicStrategy: IHeuristicStrategy,
-  val reopenClosedNodes: Boolean,
 ) {
   companion object {
     val DEFAULT: PathfinderConfiguration = builder().build()
 
     fun deepCopy(pathfinderConfiguration: PathfinderConfiguration): PathfinderConfiguration {
-      return builder()
-        .maxIterations(pathfinderConfiguration.maxIterations)
-        .maxLength(pathfinderConfiguration.maxLength)
-        .async(pathfinderConfiguration.async)
-        .fallback(pathfinderConfiguration.fallback)
-        .provider(pathfinderConfiguration.provider)
-        .heuristicWeights(pathfinderConfiguration.heuristicWeights)
-        .nodeValidationProcessors(pathfinderConfiguration.validationProcessors)
-        .nodeCostProcessors(pathfinderConfiguration.costProcessors)
-        .neighborStrategy(pathfinderConfiguration.neighborStrategy)
-        .gridCellSize(pathfinderConfiguration.gridCellSize)
-        .bloomFilterSize(pathfinderConfiguration.bloomFilterSize)
-        .bloomFilterFpp(pathfinderConfiguration.bloomFilterFpp)
-        .heuristicStrategy(pathfinderConfiguration.heuristicStrategy)
-        .reopenClosedNodes(pathfinderConfiguration.reopenClosedNodes)
-        .build()
+      return pathfinderConfiguration.copy(
+        validationProcessors = pathfinderConfiguration.validationProcessors.toList(),
+        costProcessors = pathfinderConfiguration.costProcessors.toList()
+      )
     }
 
     fun builder(): PathfinderConfigurationBuilder {
@@ -59,7 +43,6 @@ data class PathfinderConfiguration(
 
   fun getNodeValidationProcessors(): List<ValidationProcessor> = validationProcessors
 
-  fun shouldReopenClosedNodes(): Boolean = reopenClosedNodes
 }
 
 class PathfinderConfigurationBuilder {
@@ -86,11 +69,7 @@ class PathfinderConfigurationBuilder {
   private var validationProcessors: List<ValidationProcessor> = emptyList()
   private var costProcessors: List<CostProcessor> = emptyList()
   private var neighborStrategy: INeighborStrategy = NeighborStrategies.VERTICAL_AND_HORIZONTAL
-  private var gridCellSize: Int = 12
-  private var bloomFilterSize: Int = 1000
-  private var bloomFilterFpp: Double = 0.01
   private var heuristicStrategy: IHeuristicStrategy = HeuristicStrategies.LINEAR
-  private var reopenClosedNodes: Boolean = false
 
   fun maxIterations(maxIterations: Int): PathfinderConfigurationBuilder {
     this.maxIterations = maxIterations
@@ -139,33 +118,13 @@ class PathfinderConfigurationBuilder {
     return this
   }
 
-  fun gridCellSize(gridCellSize: Int): PathfinderConfigurationBuilder {
-    this.gridCellSize = gridCellSize
-    return this
-  }
-
-  fun bloomFilterSize(bloomFilterSize: Int): PathfinderConfigurationBuilder {
-    this.bloomFilterSize = bloomFilterSize
-    return this
-  }
-
-  fun bloomFilterFpp(bloomFilterFpp: Double): PathfinderConfigurationBuilder {
-    this.bloomFilterFpp = bloomFilterFpp
-    return this
-  }
-
   fun heuristicStrategy(heuristicStrategy: IHeuristicStrategy): PathfinderConfigurationBuilder {
     this.heuristicStrategy = heuristicStrategy
     return this
   }
 
-  fun reopenClosedNodes(reopenClosedNodes: Boolean): PathfinderConfigurationBuilder {
-    this.reopenClosedNodes = reopenClosedNodes
-    return this
-  }
-
-  fun build(): PathfinderConfiguration {
-    return PathfinderConfiguration(
+  fun build(): PathfinderConfiguration =
+    PathfinderConfiguration(
       maxIterations = this.maxIterations,
       maxLength = this.maxLength,
       async = this.async,
@@ -175,11 +134,6 @@ class PathfinderConfigurationBuilder {
       validationProcessors = this.validationProcessors.toList(),
       costProcessors = this.costProcessors.toList(),
       neighborStrategy = this.neighborStrategy,
-      gridCellSize = this.gridCellSize,
-      bloomFilterSize = this.bloomFilterSize,
-      bloomFilterFpp = this.bloomFilterFpp,
-      heuristicStrategy = this.heuristicStrategy,
-      reopenClosedNodes = this.reopenClosedNodes
+      heuristicStrategy = this.heuristicStrategy
     )
-  }
 }

@@ -14,23 +14,21 @@ class EvaluationContextImpl(
   private val heuristicStrategy: IHeuristicStrategy,
 ) : EvaluationContext {
 
-  override fun getCurrentPathPosition(): PathPosition = engineNode.getPosition()
+  override fun getCurrentPathPosition(): PathPosition = engineNode.position
 
-  override fun getPreviousPathPosition(): PathPosition? = parentEngineNode?.getPosition()
+  override fun getPreviousPathPosition(): PathPosition? = parentEngineNode?.position
 
-  override fun getCurrentNodeDepth(): Int = engineNode.getDepth()
+  override fun getCurrentNodeDepth(): Int = engineNode.depth
 
-  override fun getCurrentNodeHeuristicValue(): Double = engineNode.getHeuristic()
+  override fun getCurrentNodeHeuristicValue(): Double = engineNode.heuristic
 
-  override fun getPathCostToPreviousPosition(): Double {
-    return parentEngineNode?.getGCost() ?: 0.0
-  }
+  override fun getPathCostToPreviousPosition(): Double = parentEngineNode?.gCost ?: 0.0
 
   override fun getBaseTransitionCost(): Double {
     if (parentEngineNode == null) return 0.0
 
-    val from = parentEngineNode.getPosition()
-    val to = engineNode.getPosition()
+    val from = parentEngineNode.position
+    val to = engineNode.position
     val baseCost = heuristicStrategy.calculateTransitionCost(from, to)
 
     if (baseCost.isNaN() || baseCost.isInfinite()) {
@@ -45,5 +43,5 @@ class EvaluationContextImpl(
   override fun getSearchContext(): SearchContext = searchContext
 
   override fun getGrandparentPathPosition(): PathPosition? =
-    parentEngineNode?.getParent()?.getPosition()
+    parentEngineNode?.parent?.position
 }

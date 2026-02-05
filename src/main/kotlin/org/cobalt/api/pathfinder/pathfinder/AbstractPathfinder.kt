@@ -1,6 +1,5 @@
 package org.cobalt.api.pathfinder.pathfinder
 
-import java.util.LinkedHashSet
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -54,9 +53,9 @@ abstract class AbstractPathfinder(
   }
 
   protected val navigationPointProvider: NavigationPointProvider = pathfinderConfiguration.provider
-  protected val validationProcessors: List<ValidationProcessor>? =
+  protected val validationProcessors: List<ValidationProcessor> =
     pathfinderConfiguration.getNodeValidationProcessors()
-  protected val costProcessors: List<CostProcessor>? =
+  protected val costProcessors: List<CostProcessor> =
     pathfinderConfiguration.getNodeCostProcessors()
   protected val neighborStrategy: INeighborStrategy = pathfinderConfiguration.neighborStrategy
 
@@ -145,9 +144,9 @@ abstract class AbstractPathfinder(
       val openSet = PrimitiveMinHeap(1024)
       val startKey =
         try {
-          calculateHeapKey(startNode, startNode.getFCost())
+          calculateHeapKey(startNode, startNode.fCost)
         } catch (t: Throwable) {
-          startNode.getFCost()
+          startNode.fCost
         }
 
       insertStartNode(startNode, startKey, openSet)
@@ -165,7 +164,7 @@ abstract class AbstractPathfinder(
         val currentNode = extractBestNode(openSet)
         markNodeAsExpanded(currentNode)
 
-        if (currentNode.getHeuristic() < bestFallbackNode.getHeuristic()) {
+        if (currentNode.heuristic < bestFallbackNode.heuristic) {
           bestFallbackNode = currentNode
         }
 
@@ -200,7 +199,7 @@ abstract class AbstractPathfinder(
   }
 
   fun calculateHeapKey(neighbor: Node, fCost: Double): Double {
-    val heuristic = neighbor.getHeuristic()
+    val heuristic = neighbor.heuristic
     val tieBreaker = TIE_BREAKER_WEIGHT * (heuristic / (abs(fCost) + 1))
     var heapKey = fCost - tieBreaker
 
@@ -212,12 +211,10 @@ abstract class AbstractPathfinder(
   }
 
   private fun getProcessors(): List<Processor> {
-    val processors = mutableListOf<Processor>()
-
-    validationProcessors?.let { processors.addAll(it) }
-    costProcessors?.let { processors.addAll(it) }
-
-    return processors
+    return buildList {
+      validationProcessors?.let(::addAll)
+      costProcessors?.let(::addAll)
+    }
   }
 
   private fun createAbortedResult(
@@ -253,7 +250,7 @@ abstract class AbstractPathfinder(
 
   private fun hasReachedPathLengthLimit(currentNode: Node): Boolean {
     val maxLength = pathfinderConfiguration.maxLength
-    return maxLength > 0 && currentNode.getDepth() >= maxLength
+    return maxLength > 0 && currentNode.depth >= maxLength
   }
 
   private fun determinePostLoopResult(
@@ -281,8 +278,8 @@ abstract class AbstractPathfinder(
   }
 
   protected fun reconstructPath(start: PathPosition, target: PathPosition, endNode: Node): Path {
-    if (endNode.getParent() == null && endNode.getDepth() == 0) {
-      return PathImpl(start, target, listOf(endNode.getPosition()))
+    if (endNode.parent == null && endNode.depth == 0) {
+      return PathImpl(start, target, listOf(endNode.position))
     }
 
     val pathPositions = tracePathPositionsFromNode(endNode)
@@ -290,8 +287,8 @@ abstract class AbstractPathfinder(
   }
 
   private fun tracePathPositionsFromNode(leafNode: Node): List<PathPosition> {
-    return generateSequence(leafNode) { it.getParent() }
-      .map { it.getPosition() }
+    return generateSequence(leafNode) { it.parent }
+      .map { it.position }
       .toList()
       .reversed()
   }

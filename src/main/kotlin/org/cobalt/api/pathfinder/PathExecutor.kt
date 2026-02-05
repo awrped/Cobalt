@@ -41,12 +41,14 @@ object PathExecutor {
     val processor = MinecraftPathProcessor()
     val config =
       PathfinderConfiguration.builder()
-        .provider(MinecraftNavigationProvider())
-        .maxIterations(20000)
-        .async(true)
-        .neighborStrategy(NeighborStrategies.HORIZONTAL_DIAGONAL_AND_VERTICAL)
-        .nodeValidationProcessors(listOf(processor))
-        .nodeCostProcessors(listOf(processor))
+        .apply {
+          provider(MinecraftNavigationProvider())
+          maxIterations(20000)
+          async(true)
+          neighborStrategy(NeighborStrategies.HORIZONTAL_DIAGONAL_AND_VERTICAL)
+          nodeValidationProcessors(listOf(processor))
+          nodeCostProcessors(listOf(processor))
+        }
         .build()
 
     val pathfinder = AStarPathfinder(config)
