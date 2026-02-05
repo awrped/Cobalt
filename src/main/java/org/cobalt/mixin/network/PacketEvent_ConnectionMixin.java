@@ -35,7 +35,13 @@ public class PacketEvent_ConnectionMixin {
 
   @Inject(method = "sendPacket", at = @At("HEAD"))
   private void onPacketSent(Packet<?> packet, ChannelFutureListener listener, boolean flush, CallbackInfo ci) {
-    new PacketEvent.Outgoing(packet).post();
+    PacketEvent.Outgoing event = new PacketEvent.Outgoing(packet);
+    event.post();
+
+    if (event.isCancelled()) {
+      ci.cancel();
+      return;
+    }
 
     if (packet instanceof ServerboundChatPacket) {
       new ChatEvent.Send(packet).post();
