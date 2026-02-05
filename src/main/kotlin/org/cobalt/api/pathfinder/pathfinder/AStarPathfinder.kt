@@ -145,11 +145,11 @@ class AStarPathfinder(configuration: PathfinderConfiguration) : AbstractPathfind
   }
 
   private fun calculateGCost(context: EvaluationContext): Double {
-    val baseCost = context.getBaseTransitionCost()
+    val baseCost = context.baseTransitionCost
     val additionalCost = processors.sumOf { it.calculateCostContribution(context).value }
 
     val transitionCost = max(0.0, baseCost + additionalCost)
-    return context.getPathCostToPreviousPosition() + transitionCost
+    return context.pathCostToPreviousPosition + transitionCost
   }
 
   override fun markNodeAsExpanded(node: Node) {

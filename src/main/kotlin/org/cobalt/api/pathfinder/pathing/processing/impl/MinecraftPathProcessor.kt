@@ -23,10 +23,10 @@ class MinecraftPathProcessor : NodeProcessor {
   }
 
   override fun isValid(context: EvaluationContext): Boolean {
-    val provider = context.getSearchContext().getNavigationPointProvider()
-    val pos = context.getCurrentPathPosition()
-    val prev = context.getPreviousPathPosition()
-    val env = context.getSearchContext().getEnvironmentContext()
+    val provider = context.navigationPointProvider
+    val pos = context.currentPathPosition
+    val prev = context.previousPathPosition
+    val env = context.environmentContext
 
     val currentPoint = provider.getNavigationPoint(pos, env)
 
@@ -68,10 +68,10 @@ class MinecraftPathProcessor : NodeProcessor {
 
   override fun calculateCostContribution(context: EvaluationContext): Cost {
     val level = mc.level ?: return Cost.ZERO
-    val currentPos = context.getCurrentPathPosition()
-    val prevPos = context.getPreviousPathPosition() ?: return Cost.ZERO
-    val provider = context.getSearchContext().getNavigationPointProvider()
-    val env = context.getSearchContext().getEnvironmentContext()
+    val currentPos = context.currentPathPosition
+    val prevPos = context.previousPathPosition ?: return Cost.ZERO
+    val provider = context.navigationPointProvider
+    val env = context.environmentContext
 
     val currentPoint = provider.getNavigationPoint(currentPos, env)
     val prevPoint = provider.getNavigationPoint(prevPos, env)
@@ -104,7 +104,7 @@ class MinecraftPathProcessor : NodeProcessor {
     additionalCost += crampedPenalty
 
     // just make stuff smoother no more zigzags
-    val gpPos = context.getGrandparentPathPosition()
+    val gpPos = context.grandparentPathPosition
     if (gpPos != null) {
       val v1x = prevPos.x - gpPos.x
       val v1z = prevPos.z - gpPos.z

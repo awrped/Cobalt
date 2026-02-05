@@ -8,23 +8,29 @@ import org.cobalt.api.pathfinder.pathing.processing.context.SearchContext
 import org.cobalt.api.pathfinder.wrapper.PathPosition
 
 class EvaluationContextImpl(
-  private val searchContext: SearchContext,
+  override val searchContext: SearchContext,
   private val engineNode: Node,
   private val parentEngineNode: Node?,
   private val heuristicStrategy: IHeuristicStrategy,
 ) : EvaluationContext {
 
-  override fun getCurrentPathPosition(): PathPosition = engineNode.position
+  override val currentPathPosition: PathPosition
+    get() = engineNode.position
 
-  override fun getPreviousPathPosition(): PathPosition? = parentEngineNode?.position
+  override val previousPathPosition: PathPosition?
+    get() = parentEngineNode?.position
 
-  override fun getCurrentNodeDepth(): Int = engineNode.depth
+  override val currentNodeDepth: Int
+    get() = engineNode.depth
 
-  override fun getCurrentNodeHeuristicValue(): Double = engineNode.heuristic
+  override val currentNodeHeuristicValue: Double
+    get() = engineNode.heuristic
 
-  override fun getPathCostToPreviousPosition(): Double = parentEngineNode?.gCost ?: 0.0
+  override val pathCostToPreviousPosition: Double
+    get() = parentEngineNode?.gCost ?: 0.0
 
-  override fun getBaseTransitionCost(): Double {
+  override val baseTransitionCost: Double
+    get() {
     if (parentEngineNode == null) return 0.0
 
     val from = parentEngineNode.position
@@ -40,8 +46,6 @@ class EvaluationContextImpl(
     return max(baseCost, 0.0)
   }
 
-  override fun getSearchContext(): SearchContext = searchContext
-
-  override fun getGrandparentPathPosition(): PathPosition? =
-    parentEngineNode?.parent?.position
+  override val grandparentPathPosition: PathPosition?
+    get() = parentEngineNode?.parent?.position
 }
